@@ -10,8 +10,8 @@ Home Lab Build Steps
    ```apt-get update
    apt-get install curl
    chmod 700 godaddyddns.sh 
-   Test Script ./godaddyddns.sh```
-   
+   Test Script ./godaddyddns.sh
+   ```
    ##Output should be similar:
    root@CICD:~# ./godaddyddns.sh 
    2019-11-27 01:15:55 - Current External IP is 121.213.211.149, GoDaddy DNS IP is 121.213.211.149
@@ -26,7 +26,8 @@ Home Lab Build Steps
     apt-get upgrade
     apt install software-properties-common
     apt-add-repository --yes --update ppa:ansible/ansible
-    apt install ansible```
+    apt install ansible
+    ```
 
 - ##Install Docker CE for CICD Pipeline
 
