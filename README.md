@@ -75,8 +75,66 @@ Objective of the Lab is to do as much as possible as Infrastructure as Code (IaC
 
 ## Ubuntu VM Hosts
  - To Do
-    - manual build done
-    - script VM build
+    ## manual build done
+
+ready system for k8s
+
+```cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+sysctl --system
+swapoff -a
+```
+### Install Docker
+apt-get install -y apt-transport-https curl
+apt-get install -y docker.io
+systemctl enable --now docker
+
+### Install K8s
+Add Sources for install
+```curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+systemctl enable kubelet  
+systemctl start kubelet
+
+docker info | grep -i cgroup
+Cgroup Driver: cgroupfs
+```
+
+Update config file:
+/etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+```[Service]
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+```
+
+kubeadm init --service-cidr 10.96.0.0/12 --pod-network-cidr 10.244.0.0/16 --apiserver-advertise-address 192.168.0.152
+
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.0.152:6443 --token t6zu9r.q3sqhi4d0us5984w \
+    --discovery-token-ca-cert-hash sha256:3c0f1c47faefd0a036af1a199c87087fad83b3cdbaccd9778e647108153e8069
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+
+kubectl config set-credentials ubuntu --username=jarrodl --password=default
+kubectl config set-cluster home --server=http://192.168.0.152:8080
+kubectl config set-context home-context --cluster=home --user=ubuntu
+kubectl config use-context home-context
+kubectl config set contexts.home-context.namespace the-right-prefix
+kubectl config view
+
+
+## script VM build (To Do)
         - packages
         - networks
 
