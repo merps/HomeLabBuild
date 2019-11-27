@@ -28,8 +28,14 @@ echo "Australia/Sydney" | sudo tee /etc/timezone
 ## Initial Management Container (CICD)
 
 ### CICD Base Install
+Create LXC Container 
+ - edit file /etc/pve/lxc/1##.conf which allows docker to run inside an LXC container
+ ```unprivileged: 0 #Allows privileged Docker
+    lxc.apparmor.profile: unconfined
+    lxc.cgroup.devices.allow: a
+    lxc.cap.drop:
+```
 
-  
 ## Install Ansible
 ```apt-get update
    apt-get upgrade
@@ -44,8 +50,18 @@ Script Copies from Github
 ## Install Docker
 
 
-## Install Portainer
+```apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt-get update
+apt-get install -y docker-ce
+```
 
+## Install Portainer
+```mkdir /root/portainer
+   mkdir /root/portainer/data
+   docker run -d -p 9000:9000 -v /root/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+```
 
 ## Install Drone CI
 
