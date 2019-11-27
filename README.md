@@ -25,6 +25,8 @@ complete (manual build at this stage)
    apt-add-repository --yes --update ppa:ansible/ansible
    apt install ansible
 ```
+### Install Ansible Playbooks for Infrastructure
+Script Copies from Github
 
 
 ## Install Docker
@@ -35,9 +37,13 @@ complete (manual build at this stage)
 
 ## Install Drone CI
 
+### CICD Pipeline Infra
+- Drone Install
+- Github Integration
 
 # IaC Section Below
 
+Objective of the Lab is to do as much as possible as Infrastructure as Code (IaC). This includes all VM hosts, K8s cluster, F5, and additional services.
 
 ## Ubuntu VM Hosts
  - To Do
@@ -60,9 +66,7 @@ complete (manual build at this stage)
 
 
 ## Stacks to be installed (Kubernetes Prefered)
-- CICD Pipeline Infra
-        Drone for CI
-        Github
+
 - Monitoring
         Prometheus
         Grafana
