@@ -1,25 +1,23 @@
 # HomeLabBuild
 
 # Proxmox Build
-done (manual build at this stage)
+complete (manual build at this stage)
 
 ## Initial Management Container (CICD)
 
 ### GoDaddy Dynamic DNS Script
    ```apt-get update
    apt-get install curl
-   chmod 700 godaddyddns.sh 
-   Test Script ./godaddyddns.sh:
+   chmod 700 godaddyddns.sh
+   #Install script into CRONTAB
+   crontab -l | { cat; echo "*/15 * * * * /root/godaddyddns.sh"; } | crontab -
    
+   Test Script ./godaddyddns.sh:
    root@CICD:~# ./godaddyddns.sh 
    2019-11-27 01:15:55 - Current External IP is 121.213.211.149, GoDaddy DNS IP is 121.213.211.149
    ```
 
-  Install script into CRONTAB
-  ```crontab -l | { cat; echo "*/15 * * * * /root/godaddyddns.sh"; } | crontab -
-  ```
-
-
+  
 ## Install Ansible
 ```apt-get update
    apt-get upgrade
@@ -29,13 +27,13 @@ done (manual build at this stage)
 ```
 
 
-## Install Docker CE for CICD Pipeline
-
-
-## Install Drone CI
+## Install Docker
 
 
 ## Install Portainer
+
+
+## Install Drone CI
 
 
 # IaC Section Below
