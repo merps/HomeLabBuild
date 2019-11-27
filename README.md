@@ -3,7 +3,15 @@
 # Proxmox Build
 complete (manual build at this stage)
 
-## Initial Management Container (CICD)
+   Git and NTP installs
+   
+   ```apt-get install ntp -y
+      apt-get install git -y
+      git clone https://github.com/JLCode-tech/HomeLabBuild.git
+   ```
+
+NTP
+echo "Australia/Sydney" | sudo tee /etc/timezone
 
 ### GoDaddy Dynamic DNS Script
    ```apt-get update
@@ -17,13 +25,17 @@ complete (manual build at this stage)
    2019-11-27 01:15:55 - Current External IP is 121.213.211.149, GoDaddy DNS IP is 121.213.211.149
    ```
 
+## Initial Management Container (CICD)
+
+### CICD Base Install
+
   
 ## Install Ansible
 ```apt-get update
    apt-get upgrade
-   apt install software-properties-common
+   apt install software-properties-common -y
    apt-add-repository --yes --update ppa:ansible/ansible
-   apt install ansible
+   apt install ansible -y
 ```
 ### Install Ansible Playbooks for Infrastructure
 Script Copies from Github
