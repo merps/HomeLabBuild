@@ -68,6 +68,7 @@ scp root@mando:/root/.ssh/luciatech.co.kubernetes /root/.ssh/luciatech.co.kubern
 ```
 ### Install Ansible Playbooks for Infrastructure from GIT
 Script Copies from Github
+apt-get install -y git
 git clone https://github.com/JLCode-tech/Bootstrap-Kubernetes-with-QEMU.git
 
 * Do not run playbooks until VM infrabuild below
