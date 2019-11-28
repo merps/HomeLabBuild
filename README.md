@@ -21,12 +21,12 @@ nameserver 8.8.8.8
 nameserver 8.8.4.4
 
 /etc/hosts
-192.168.0.250 mando.luciatech.co
-192.168.0.248 yoda.luciatech.co
-192.168.0.152 kuiil.luciatech.co
-192.168.0.153 cara.luciatech.co
-192.168.0.154 remnant.luciatech.co
-192.168.0.155 razor.luciatech.co
+192.168.0.250 mando.luciatech.co mando
+192.168.0.248 yoda.luciatech.co yoda
+192.168.0.152 kuiil.luciatech.co kuiil
+192.168.0.153 cara.luciatech.co cara
+192.168.0.154 remnant.luciatech.co remnant
+192.168.0.155 razor.luciatech.co razor
 
 ### Create SSH Key for K8s and subsequent installs
 ssh-keygen -t rsa
@@ -57,6 +57,7 @@ Create LXC Container
 Copy SSH Key
 
 scp root@mando:/root/.ssh/luciatech.co.kubernetes.pub /root/.ssh/luciatech.co.kubernetes.pub
+scp root@mando:/root/.ssh/luciatech.co.kubernetes /root/.ssh/luciatech.co.kubernetes
 
 ## Install Ansible
 ```apt-get update
