@@ -13,6 +13,25 @@ complete (manual build at this stage)
 NTP
 echo "Australia/Sydney" | sudo tee /etc/timezone
 
+Hosts file (Transition to DNS - future)
+
+/etc/resolv.conf
+search luciatech.co
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+/etc/hosts
+192.168.0.250 mando.luciatech.co
+192.168.0.248 yoda.luciatech.co
+192.168.0.152 kuiil.luciatech.co
+192.168.0.153 cara.luciatech.co
+192.168.0.154 remnant.luciatech.co
+192.168.0.155 razor.luciatech.co
+
+### Create SSH Key for K8s and subsequent installs
+ssh-keygen -t rsa
+/root/.ssh/luciatech.co.kubernetes
+
 ### GoDaddy Dynamic DNS Script
    ```apt-get update
    apt-get install curl
@@ -35,6 +54,9 @@ Create LXC Container
     lxc.cgroup.devices.allow: a
     lxc.cap.drop:
 ```
+Copy SSH Key
+
+scp root@mando:/root/.ssh/luciatech.co.kubernetes.pub /root/.ssh/luciatech.co.kubernetes.pub
 
 ## Install Ansible
 ```apt-get update
