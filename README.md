@@ -54,8 +54,8 @@ Create LXC Container
     lxc.cgroup.devices.allow: a
     lxc.cap.drop:
 ```
+### Copy Keys from mando
 Copy SSH Key
-
 scp root@mando:/root/.ssh/luciatech.co.kubernetes.pub /root/.ssh/luciatech.co.kubernetes.pub
 scp root@mando:/root/.ssh/luciatech.co.kubernetes /root/.ssh/luciatech.co.kubernetes
 
@@ -101,11 +101,12 @@ Objective of the Lab is to do as much as possible as Infrastructure as Code (IaC
 ## Ubuntu VM Hosts
 
 ### VM build + Kubernetes Infra via Ansible
-
 Run the deployment: `ansible-playbook -i inventory.ini site.yml`
 After deployment, a `~/.kube` directory will be created on CICD Host. You can use the `config` file within to interact with your cluster.
 
-
+### CICD to Access WebUI
+kubectl --kubeconfig config describe -n kube-system secret jarrodl-token | grep token: | awk '{print $2}'
+kubectl --kubeconfig config proxy
 
 
 ## VyOS Mgmt Router (Network Mgmt Interfaces)
