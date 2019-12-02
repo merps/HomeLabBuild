@@ -50,9 +50,9 @@ ssh-keygen -t rsa
 Create LXC Container 
  - edit file /etc/pve/lxc/1##.conf which allows docker to run inside an LXC container
  ```unprivileged: 0 #Allows privileged Docker
-    lxc.apparmor.profile: unconfined
+   lxc.apparmor.profile: unconfined
     lxc.cgroup.devices.allow: a
-    lxc.cap.drop:
+    lxc.cap.drop: 
 ```
 ### Copy Keys from mando
 Copy SSH Key
@@ -85,13 +85,16 @@ apt-get install -y docker-ce
 ## Install Portainer
 ```mkdir /root/portainer
    mkdir /root/portainer/data
-   docker run -d -p 9000:9000 -v /root/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+   docker run -d -p 9000:9000 --privileged -v /root/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
 ```
 
 ## Install Drone CI
 
 ### CICD Pipeline Infra
 - Drone Install
+
+
+
 - Github Integration
 
 # IaC Section Below
@@ -101,8 +104,13 @@ Objective of the Lab is to do as much as possible as Infrastructure as Code (IaC
 ## Ubuntu VM Hosts
 
 ### VM build + Kubernetes Infra via Ansible
-Run the deployment: `ansible-playbook -i inventory.ini site.yml`
+1. Run the deployment: `ansible-playbook -i inventory.ini site.yml`
 After deployment, a `~/.kube` directory will be created on CICD Host. You can use the `config` file within to interact with your cluster.
+
+2. ansible-playbook -i inventory.ini playbooks/optional/deploy_metallb.yml
+3. ansible-playbook -i inventory.ini playbooks/optional/deploy_dashboard.yml
+
+
 
 ### CICD to Access WebUI
 kubectl --kubeconfig config describe -n kube-system secret jarrodl-token | grep token: | awk '{print $2}'
