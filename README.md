@@ -118,17 +118,23 @@ kubectl --kubeconfig config proxy
 
 
 ## VyOS Mgmt Router (Network Mgmt Interfaces)
-    -   script vm for proxmox
+
+git clone https://github.com/JLCode-tech/VyosHome
+1. Run the deployment: `ansible-playbook -i inventory.ini vyossite.yml`
 
 ## Install F5
     - mgmt IP off VyOS
-    - External IP (192.168.0.155)
-        Firewall ingress
-        LB ingress for K8s
+
+git clone https://github.com/JLCode-tech/BigIpHome
+1. Run the deployment: `ansible-playbook -i inventory.ini f5site.yml`
+
+- External VIP (192.168.0.155)
+
 
 
 ## Stacks to be installed (Kubernetes Prefered)
 
+- CIS K8s
 - Monitoring
         Prometheus
         Grafana
