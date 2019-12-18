@@ -13,6 +13,7 @@ complete (manual build at this stage)
 NTP
 echo "Australia/Sydney" | sudo tee /etc/timezone
 
+
 Hosts file (Transition to DNS - future)
 
 /etc/resolv.conf
@@ -47,6 +48,14 @@ ssh-keygen -t rsa
 ## Initial Management Container (CICD)
 
 ### CICD Base Install
+
+Allow Root SSH login
+sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+Add in Multiple Interfaces
+ - eth1 Internal
+ - eth2 Control
+
 Create LXC Container 
  - edit file /etc/pve/lxc/1##.conf which allows docker to run inside an LXC container
  ```unprivileged: 0 #Allows privileged Docker
@@ -75,11 +84,17 @@ git clone https://github.com/JLCode-tech/Bootstrap-Kubernetes-with-QEMU.git
 
 ## Install Docker
 
-```apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y
+```apt-get update
+apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 apt-get update
 apt-get install -y docker-ce
+```
+
+## Create Docker Data Directorys
+```mkdir /root/docker
+   mkdir /root/docker/data
 ```
 
 ## Install Portainer
