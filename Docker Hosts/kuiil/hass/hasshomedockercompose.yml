@@ -1,0 +1,15 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:stable
+    volumes:
+      - /root/docker/data/hass/:/config
+    #devices:
+    #  - /dev/ttyUSB0:/dev/ttyUSB0
+    #  - /dev/ttyUSB1:/dev/ttyUSB1
+    #  - /dev/ttyACM0:/dev/ttyACM0
+    environment:
+      - TZ=Australia/Sydney
+    restart: always
+    network_mode: host
