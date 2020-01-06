@@ -17,7 +17,7 @@ services:
     environment:
       TZ: 'Australia/Sydney'
       WEBPASSWORD: 'mongo!123'
-      ServerIP: '10.1.0.240'
+      ServerIP: '10.1.0.241'
     # Volumes store your data between container upgrades
     volumes:
        - '/root/docker/data/homepihole/etc-pihole/:/etc/pihole/'
