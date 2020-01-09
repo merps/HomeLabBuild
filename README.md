@@ -100,7 +100,7 @@ apt-get install -y docker-ce
 ## Install Portainer
 ```mkdir /root/portainer
    mkdir /root/portainer/data
-   docker run -d -p 9000:9000 --privileged -v /root/portainer/data:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+   docker run -d -p 9000:9000 -p 8000:8000 --privileged --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /root/docker/data/portainer/data:/data portainer/portainer
 ```
 
 ## Install Drone CI
