@@ -1,9 +1,16 @@
+#Allow ssh
+vi /etc/ssh/sshd_config
+change Permit = Yes
+
+#Updte Static IP
+vi /etc/network/interfaces
+
 #Base Docker Directories
 mkdir docker/data
 mkdir docker/compose
 
 ##Specific Directories for Containers
-#piholehome
+
 
 
 Example Host
