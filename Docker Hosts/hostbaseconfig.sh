@@ -60,3 +60,14 @@ root@cara:~# history
    41  cat docker/compose/homepihole/piholehomedocker.yml
    42  docker ps
    43  history
+
+
+   docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes -v /:/host --restart always /
+    -e EDGE=1 -e EDGE_ID=63312e49-0a97-4e62-8f03-cf0bb2d0b827 / 
+    -e EDGE_KEY=aHR0cDovLzEwLjEuMC4yNDA6OTAwMHwxMC4xLjAuMjQwOjgwMDB8YzE6YTc6ZTI6ODM6N2I6ZjQ6Zjk6NGY6ZWI6Mjg6MjI6OGM6OTc6NGQ6NzY6ZmF8NA / 
+    -e CAP_HOST_MANAGEMENT=1 -p 8000:80 -v portainer_agent_data:/data --name portainer_edge_agent portainer/agent
+
+    docker run -d -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes -v /:/host --restart always /
+    -e EDGE=1 -e EDGE_ID=a7615a50-ea06-4cdd-8a47-3221a65779ba / 
+    -e EDGE_KEY=aHR0cDovLzEwLjEuMC4yNDA6ODAwMHwxMC4xLjAuMjQwOjgwMDB8YzE6YTc6ZTI6ODM6N2I6ZjQ6Zjk6NGY6ZWI6Mjg6MjI6OGM6OTc6NGQ6NzY6ZmF8Ng / 
+    -e CAP_HOST_MANAGEMENT=1 -p 8000:80 -v portainer_agent_data:/data --name portainer_edge_agent portainer/agent
