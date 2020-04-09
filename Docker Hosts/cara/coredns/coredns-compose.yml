@@ -1,0 +1,19 @@
+docker run -d -p 53:53/udp --name coredns --restart always -v /var/run/docker.sock:/var/run/docker.sock -v  coredns/coredns -conf /data/Corefile
+
+version: '2'
+
+services:
+  coredns:
+    image: coredns/coredns
+    restart: always
+    ports:
+      - "53:53"
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/docker/data/coredns/:/data
+
+volumes:
+  coredns:
+
+  -conf /data/Corefile
