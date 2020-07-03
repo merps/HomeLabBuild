@@ -68,13 +68,42 @@ Copy SSH Key
 scp root@mando:/root/.ssh/luciatech.co.kubernetes.pub /root/.ssh/luciatech.co.kubernetes.pub
 scp root@mando:/root/.ssh/luciatech.co.kubernetes /root/.ssh/luciatech.co.kubernetes
 
-## Install Terraform
+## Install Ansible
 ```apt-get update
    apt-get upgrade
    apt install software-properties-common -y
+   apt-add-repository --yes --update ppa:ansible/ansible
+   apt install ansible -y
+```
+### Install Ansible Playbooks for Infrastructure from GIT
+Script Copies from Github
+apt-get install -y git
+git clone https://github.com/JLCode-tech/Bootstrap-Kubernetes-with-QEMU.git
+
+* Do not run playbooks until VM infrabuild below
+
+## Install Docker
+
+```apt-get update
+apt-get install apt-transport-https ca-certificates curl gnupg2 software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+apt-get update
+apt-get install -y docker-ce
 ```
 
+## Create Docker Data Directorys
+```mkdir /root/docker
+   mkdir /root/docker/data
+```
 
+## Install Portainer
+```mkdir /root/portainer
+   mkdir /root/portainer/data
+   docker run -d -p 9000:9000 -p 8000:8000 --privileged --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /root/docker/data/portainer/data:/data portainer/portainer
+```
+
+## Install Drone CI
 
 ### CICD Pipeline Infra
 - Drone Install
@@ -89,8 +118,12 @@ Objective of the Lab is to do as much as possible as Infrastructure as Code (IaC
 
 ## Ubuntu VM Hosts
 
-### VM build + Kubernetes Infra via Terraform
+### VM build + Kubernetes Infra via Ansible
+1. Run the deployment: `ansible-playbook -i inventory.ini site.yml`
+After deployment, a `~/.kube` directory will be created on CICD Host. You can use the `config` file within to interact with your cluster.
 
+2. ansible-playbook -i inventory.ini playbooks/optional/deploy_metallb.yml
+3. ansible-playbook -i inventory.ini playbooks/optional/deploy_dashboard.yml
 
 
 
@@ -107,7 +140,10 @@ git clone https://github.com/JLCode-tech/VyosHome
 ## Install F5
     - mgmt IP off VyOS
 
+git clone https://github.com/JLCode-tech/BigIpHome
+1. Run the deployment: `ansible-playbook -i inventory.ini f5site.yml`
 
+- External VIP (192.168.0.155)
 
 
 
