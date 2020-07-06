@@ -20,4 +20,4 @@ kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/mas
 #kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/calico/calico.yaml
 
 kubectl get pods --all-namespaces
-kubectl get nodes
+kubectl get nodes -o wide

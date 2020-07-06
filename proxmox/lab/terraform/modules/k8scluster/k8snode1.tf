@@ -49,7 +49,7 @@ resource "proxmox_vm_qemu" "k8snode1" {
   sshkeys = var.sshkeys
 
 provisioner "file" {
-        source      = "configurek8node_phase1.sh"
+        source      = ".//modules/k8scluster/configurek8node_phase1.sh"
         destination = "/tmp/configurek8node_phase1.sh"
 
         connection {
@@ -74,7 +74,7 @@ provisioner "file" {
     }
     provisioner "remote-exec" {
         inline = [
-            "apt-get install -y kubelet kubeadm kubectl kubernetes-cni"
+            "sudo apt-get install -y kubelet kubeadm kubectl kubernetes-cni"
         ]
       
         connection {
@@ -85,7 +85,7 @@ provisioner "file" {
         }
     }
     provisioner "file" {
-        source      = "configurek8node_phase2.sh"
+        source      = ".//modules/k8scluster/configurek8node_phase2.sh"
         destination = "/tmp/configurek8node_phase2.sh"
 
         connection {
