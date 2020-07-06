@@ -39,84 +39,84 @@ resource "proxmox_vm_qemu" "k8sleader" {
 
 
 # Configure Kubernetes #
-    provisioner "file" {
-        source      = ".//modules/k8scluster/configurek8sleader_phase1.sh"
-        destination = "/tmp/configurek8sleader_phase1.sh"
-        connection {
-            type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
+    #provisioner "file" {
+    #    source      = ".//modules/k8scluster/configurek8sleader_phase1.sh"
+    #    destination = "/tmp/configurek8sleader_phase1.sh"
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.140"
+    #    }
+    #}
+    #provisioner "remote-exec" {
+    ##    inline = [
+    #        "chmod +x /tmp/configurek8sleader_phase1.sh",
+    #        "/tmp/configurek8sleader_phase1.sh",
+    #    ]
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.140"
+    #    }
+    #}
+    #provisioner "remote-exec" {
+    #    inline = [
+    #        "sudo apt-get install -y kubelet kubeadm kubectl kubernetes-cni"   
+    #    ]
+    #  
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.140"
+    #    }
+    #}
+
+    #provisioner "file" {
+    #    source      = ".//modules/k8scluster/configurek8sleader_phase2.sh"
+    #    destination = "/tmp/configurek8sleader_phase2.sh"
+
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.140"
+    #    }
+    #}
+
+    #provisioner "remote-exec" {
+    #    inline = [
+    #        "chmod +x /tmp/configurek8sleader_phase2.sh",
+    #        "/tmp/configurek8sleader_phase2.sh",
+    #    ]
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.140"
+    #    }
+    #}
     provisioner "remote-exec" {
         inline = [
-            "chmod +x /tmp/configurek8sleader_phase1.sh",
-            "/tmp/configurek8sleader_phase1.sh",
-        ]
-        connection {
-            type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "sudo apt-get install -y kubelet kubeadm kubectl kubernetes-cni"   
+            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.140"
         ]
       
         connection {
             type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
-
-    provisioner "file" {
-        source      = ".//modules/k8scluster/configurek8sleader_phase2.sh"
-        destination = "/tmp/configurek8sleader_phase2.sh"
-
-        connection {
-            type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
-
-    provisioner "remote-exec" {
-        inline = [
-            "chmod +x /tmp/configurek8sleader_phase2.sh",
-            "/tmp/configurek8sleader_phase2.sh",
-        ]
-        connection {
-            type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "sudo kubeadm init --pod-network-cidr=10.30.0.0/16"
-        ]
-      
-        connection {
-            type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host    = "192.168.1.140"
         }
     }
     provisioner "file" {
-        source      = ".//modules/k8scluster/configurek8sleader_phase3.sh"
+        source      = "./modules/k8scluster/configurek8sleader_phase3.sh"
         destination = "/tmp/configurek8sleader_phase3.sh"
 
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host    = "192.168.1.140"
         }
@@ -128,7 +128,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
         ]
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host    = "192.168.1.140"
         }
@@ -137,7 +137,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
 }
 
 data "external" "kubeadm_join" {
-    program = ["./kubeadm-token.sh"]
+    program = ["./modules/k8scluster/kubeadm-token.sh"]
 
     query = {
         host = "192.168.1.140"

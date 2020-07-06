@@ -40,7 +40,7 @@ resource "proxmox_vm_qemu" "k8snode1" {
     bridge = "vmbr0"
   }
 
-  ssh_user = "debian"
+  ssh_user = "root"
 
   os_type = "cloud-init"
   #ipconfig0 = "ip=${"${192.168.1.141}" + count.index}/24,gw=192.168.1.1"
@@ -49,12 +49,12 @@ resource "proxmox_vm_qemu" "k8snode1" {
   sshkeys = var.sshkeys
 
 provisioner "file" {
-        source      = ".//modules/k8scluster/configurek8node_phase1.sh"
+        source      = "./modules/k8scluster/configurek8node_phase1.sh"
         destination = "/tmp/configurek8node_phase1.sh"
 
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default" 
             host = "192.168.1.141"
         }
@@ -67,7 +67,7 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default" 
             host = "192.168.1.141"     
         }
@@ -79,18 +79,18 @@ provisioner "file" {
       
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host = "192.168.1.141"
         }
     }
     provisioner "file" {
-        source      = ".//modules/k8scluster/configurek8node_phase2.sh"
+        source      = "./modules/k8scluster/configurek8node_phase2.sh"
         destination = "/tmp/configurek8node_phase2.sh"
 
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host = "192.168.1.141"
         }
@@ -102,7 +102,7 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host = "192.168.1.141"
         }
@@ -113,7 +113,7 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "debian"
+            user     = "root"
             password = "default"
             host = "192.168.1.141"
         }
