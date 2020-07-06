@@ -42,7 +42,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             ##password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
     provisioner "remote-exec" {
@@ -54,7 +54,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
     provisioner "remote-exec" {
@@ -66,7 +66,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
 
@@ -78,7 +78,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
 
@@ -91,7 +91,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
     provisioner "remote-exec" {
@@ -103,7 +103,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
     provisioner "file" {
@@ -114,7 +114,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
     provisioner "remote-exec" {
@@ -126,7 +126,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             #password = var.vsphere_vm_password
-            host    = 192.168.1.140
+            host    = "192.168.1.140"
         }
     }
 

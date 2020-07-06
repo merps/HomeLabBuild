@@ -11,8 +11,8 @@ resource "time_sleep" "wait_2_mins" {
 }
 
 
-# Create a vSphere VM in the folder #
-resource "vsphere_virtual_machine" "k8snode" {
+# Create the Proxmox Nodes #
+resource "proxmox_vm_qemu" "k8snode" {
 
   count = length(var.ips)
 
