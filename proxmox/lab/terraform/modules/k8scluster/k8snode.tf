@@ -44,7 +44,7 @@ resource "proxmox_vm_qemu" "k8snode" {
   os_type = "cloud-init"
   ipconfig0 = "ip=${var.main_ip}/24,gw=192.168.1.1"
 
-  sshkeys = var.ssh_key
+  sshkeys = var.sshkeys
   #sshkeys = <<EOF
   #    "private ssh key"
 #EOF

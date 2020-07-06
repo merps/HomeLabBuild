@@ -32,7 +32,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
   os_type = "cloud-init"
   ipconfig0 = "ip=192.168.1.140/24,gw=192.168.1.1"
 
-  sshkeys = var.ssh_key
+  sshkeys = var.sshkeys
 
 # Configure Kubernetes #
     provisioner "file" {
