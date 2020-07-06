@@ -82,9 +82,26 @@ helm install prometheus stable/prometheus --namespace monitoring --set alertmana
 #
 # ---- Grafana -----------
 #kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/grafana/001-grafana.yaml
+Create grafana.yaml
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
 helm install grafana stable/grafana --namespace monitoring --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values grafana.yml --set service.type=LoadBalancer
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
 kubectl -n monitoring get services
+
+# --- InfluxDB ------
+helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=20Gi --set persistence.storageClass=longhorn
+
+# ---- Speedtest--------
+helm install speedtest billimek/speedtest -n monitoring
+kubectl logs -f --namespace monitoring $(kubectl get pods --namespace monitoring -l app=speedtest -o jsonpath='{ .items[0].metadata.name }')
 
 # EFK monitoring stack --------------------------------------------------------------------------
 kubectl apply -f efk-logging/elastic.yaml
