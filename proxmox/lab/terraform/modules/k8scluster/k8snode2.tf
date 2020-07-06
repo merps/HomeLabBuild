@@ -48,65 +48,6 @@ resource "proxmox_vm_qemu" "k8snode2" {
 
   sshkeys = var.sshkeys
 
-provisioner "file" {
-        source      = "./modules/k8scluster/configurek8node_phase1.sh"
-        destination = "/tmp/configurek8node_phase1.sh"
-
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default" 
-            host = "192.168.1.142"
-        }
-    }
-
-    provisioner "remote-exec" {
-        inline = [
-            "chmod +x /tmp/configurek8node_phase1.sh",
-            "/tmp/configurek8node_phase1.sh",
-        ]
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default" 
-            host = "192.168.1.142"     
-        }
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "apt-get install -y kubelet kubeadm kubectl kubernetes-cni"
-        ]
-      
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default"
-            host = "192.168.1.142"
-        }
-    }
-    provisioner "file" {
-        source      = "./modules/k8scluster/configurek8node_phase2.sh"
-        destination = "/tmp/configurek8node_phase2.sh"
-
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default"
-            host = "192.168.1.142"
-        }
-    }
-    provisioner "remote-exec" {
-        inline = [
-            "chmod +x /tmp/configurek8node_phase2.sh",
-            "/tmp/configurek8node_phase2.sh",
-        ]
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default"
-            host = "192.168.1.142"
-        }
-    }
     provisioner "remote-exec" {
         inline = [
             "${data.external.kubeadm_join.result.command}"

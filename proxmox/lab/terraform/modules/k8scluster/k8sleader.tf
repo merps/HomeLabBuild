@@ -33,71 +33,8 @@ resource "proxmox_vm_qemu" "k8sleader" {
   ipconfig0 = "ip=192.168.1.140/24,gw=192.168.1.1"
 
   sshkeys = var.sshkeys
-  #sshkeys = <<EOF
-  #    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUMACmb30ibzLXL0YmzObJZEzyjfOVNTwVo9wVCwkvQtigKbPlmc+WPY9O1+VDTAIdLua/bIESYtQmWoVy48/Zz+nBgF9+RsqM1P6FXW/s5y3P0fbsoqCbLKP9uM3b2lLKnwzfzDvWBvjjLsMPW6AG6uStj087t+l5kQMo1fvc/lEclddYrL/SIoebZrslflA0ZHdXr4RTgKIX4V6zcnBN/Yc4xwd8FtEyovn7ibZz4ZuKHi6Ff9M/hfD6z1HHbqgLWQacv4uTf4rw5Wsu8dtYO9+wZbFpCHc7q+eNi9rO2O0/QsJ0KGMmNn4BegLevZwju9x8Q/J4UGhBlKAgOCGN ubuntu@pve00"
-#EOF
 
 
-# Configure Kubernetes #
-    #provisioner "file" {
-    #    source      = ".//modules/k8scluster/configurek8sleader_phase1.sh"
-    #    destination = "/tmp/configurek8sleader_phase1.sh"
-    #    connection {
-    #        type     = "ssh"
-    #        user     = "root"
-    #        password = "default"
-    #        host    = "192.168.1.140"
-    #    }
-    #}
-    #provisioner "remote-exec" {
-    ##    inline = [
-    #        "chmod +x /tmp/configurek8sleader_phase1.sh",
-    #        "/tmp/configurek8sleader_phase1.sh",
-    #    ]
-    #    connection {
-    #        type     = "ssh"
-    #        user     = "root"
-    #        password = "default"
-    #        host    = "192.168.1.140"
-    #    }
-    #}
-    #provisioner "remote-exec" {
-    #    inline = [
-    #        "sudo apt-get install -y kubelet kubeadm kubectl kubernetes-cni"   
-    #    ]
-    #  
-    #    connection {
-    #        type     = "ssh"
-    #        user     = "root"
-    #        password = "default"
-    #        host    = "192.168.1.140"
-    #    }
-    #}
-
-    #provisioner "file" {
-    #    source      = ".//modules/k8scluster/configurek8sleader_phase2.sh"
-    #    destination = "/tmp/configurek8sleader_phase2.sh"
-
-    #    connection {
-    #        type     = "ssh"
-    #        user     = "root"
-    #        password = "default"
-    #        host    = "192.168.1.140"
-    #    }
-    #}
-
-    #provisioner "remote-exec" {
-    #    inline = [
-    #        "chmod +x /tmp/configurek8sleader_phase2.sh",
-    #        "/tmp/configurek8sleader_phase2.sh",
-    #    ]
-    #    connection {
-    #        type     = "ssh"
-    #        user     = "root"
-    #        password = "default"
-    #        host    = "192.168.1.140"
-    #    }
-    #}
     provisioner "remote-exec" {
         inline = [
             "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.140"
@@ -110,22 +47,17 @@ resource "proxmox_vm_qemu" "k8sleader" {
             host    = "192.168.1.140"
         }
     }
-    provisioner "file" {
-        source      = "./modules/k8scluster/configurek8sleader_phase3.sh"
-        destination = "/tmp/configurek8sleader_phase3.sh"
-
-        connection {
-            type     = "ssh"
-            user     = "root"
-            password = "default"
-            host    = "192.168.1.140"
-        }
-    }
     provisioner "remote-exec" {
         inline = [
-            "chmod +x /tmp/configurek8sleader_phase3.sh",
-            "/tmp/configurek8sleader_phase3.sh",
+            "mkdir -p $HOME/.kube",
+            "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
+            "chown $(id -u):$(id -g) $HOME/.kube/config",
+            "kubectl taint nodes --all node-role.kubernetes.io/master-",
+            "kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/cilium/cilium-custom.yaml",
+            "kubectl get pods --all-namespaces",
+            "kubectl get nodes -o wide"
         ]
+      
         connection {
             type     = "ssh"
             user     = "root"
