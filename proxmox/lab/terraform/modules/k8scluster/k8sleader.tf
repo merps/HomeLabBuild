@@ -100,7 +100,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
     }
     provisioner "remote-exec" {
         inline = [
-            "sudo kubeadm init --pod-network-cidr=${var.proxmox_k8pod_network} --apiserver-advertise-address=192.168.1.140"
+            "sudo kubeadm init --pod-network-cidr=10.30.0.0/16"
         ]
       
         connection {
