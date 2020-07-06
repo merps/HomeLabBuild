@@ -30,30 +30,30 @@ sudo kubeadm join 192.168.1.140:6443 --token m5tfd1.48ca3j74b7wv2ht4 --discovery
 
 #--- Load Balancer Install ---------------------------------------------------------------------------------------
 #Install LB - Using Metallb
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/metallb/metallb-namespace.yaml
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/metallb/metallb.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
 # On first install only
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/metallb/metallbconfigmap.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
 
 
 #--- Dashboard Install ---------------------------------------------------------------------------------------
 #Install Dashboard
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/dashboard/dashboard.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/dashboard/dashboard.yaml
 #Create Admin Access
-kubectl create -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/dashboard/dashboard.admin-user.yml -f dashboard.admin-user-role.yml
+kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/dashboard/dashboard.admin-user.yml -f dashboard.admin-user-role.yml
 #Get Token for Access
 kubectl -n kubernetes-dashboard describe secret admin-user-token | grep ^token
 kubectl -n kubernetes-dashboard get services
 
 #--- Storage Longhorn ---------------------------------------------------------------------------------------
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/longhorn/001-longhorn.yaml
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/longhorn/002-storageclass.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/002-storageclass.yaml
 kubectl -n longhorn-system get services
 
 #--- Portainer Install ---------------------------------------------------------------------------------------
 #Portainer Install
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/portainer/portainer.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/portainer/portainer.yaml
 #NodePort Install Below
 #kubectl apply -f portainer-nodeport.yaml
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
@@ -62,7 +62,7 @@ kubectl -n portainer get services
 
 #--- Hubble Install ---------------------------------------------------------------------------------------
 #Hubble Install
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/hubble/hubble.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/hubble/hubble.yaml
 kubectl -n kube-system get services
 
 #HELM Install
@@ -71,17 +71,17 @@ helm repo add influxdata https://helm.influxdata.com/
 
 # K8s Infra monitoring stack --------------------------------------------------------------------------
 # ---- Prometheus -----------
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/prometheus/001-namespace.yaml
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/prometheus/002-promdeploy.yaml
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/prometheus/003-promconfig.yaml
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/prometheus/004-nodeexport.yaml
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/prometheus/005-statemetrics.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/prometheus/001-namespace.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/prometheus/002-promdeploy.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/prometheus/003-promconfig.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/prometheus/004-nodeexport.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/prometheus/005-statemetrics.yaml
 kubectl create namespace monitoring
 helm install prometheus stable/prometheus --namespace monitoring --set alertmanager.persistentVolume.storageClass="longhorn" --set server.persistentVolume.storageClass="longhorn"
 #
 #
 # ---- Grafana -----------
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/f5k8slab/master/k8s/prometheus-grafana/grafana/001-grafana.yaml
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/001-grafana.yaml
 Create grafana.yaml
 datasources:
   datasources.yaml:

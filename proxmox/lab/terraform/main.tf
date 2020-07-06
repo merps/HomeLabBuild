@@ -6,11 +6,10 @@ provider "proxmox" {
 }
 
 module "k8s-cluster" {
-  source = ".//modules/generic-cluster"
+  source = ".//modules/k8scluster"
 
   name_prefix = "k8s-node"
   ips = [
-    "192.168.1.140",
     "192.168.1.141",
     "192.168.1.142"
     #"192.168.1.143",
