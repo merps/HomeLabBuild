@@ -5,7 +5,7 @@ provider "proxmox" {
   pm_user           = var.pm_user
 }
 
-module "k8s-cluster" {
+module "k8scluster" {
   source = ".//modules/k8scluster"
 
   name_prefix = "k8s-node"

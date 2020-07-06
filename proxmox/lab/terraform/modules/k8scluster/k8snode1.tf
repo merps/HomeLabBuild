@@ -2,9 +2,9 @@
 # Proxmox Node Creation
 #===============================================================================
 
-resource "null_resource" "previous" {}
+resource "null_resource" "previous2" {}
 
-resource "time_sleep" "wait_2_mins" {
+resource "time_sleep" "wait_2_mins2" {
   depends_on = [null_resource.previous]
 
   create_duration = "120s"
@@ -12,15 +12,16 @@ resource "time_sleep" "wait_2_mins" {
 
 
 # Create the Proxmox Nodes #
-resource "proxmox_vm_qemu" "k8snode" {
+resource "proxmox_vm_qemu" "k8snode1" {
 
-  count = length(var.ips)
+  #count = length(192.168.1.141)
 
-  name = "${var.node_name}"
+  #name = "${var.node_name}" + count.index
+  name = "K8s-node-1"
   desc = "terraform-created vm"
   target_node = "mando"
 
-  clone = "ubuntu-ci"
+  clone = "debian-10-template"
 
   cores = 2
   sockets = 1
@@ -28,7 +29,7 @@ resource "proxmox_vm_qemu" "k8snode" {
 
 	disk {
 		id = 0
-		type = "scsi"
+		type = "virtio"
 		storage = "local-lvm"
 		size = "80G"
 	}
@@ -39,15 +40,13 @@ resource "proxmox_vm_qemu" "k8snode" {
     bridge = "vmbr0"
   }
 
-  ssh_user = "ubuntu"
+  ssh_user = "debian"
 
   os_type = "cloud-init"
-  ipconfig0 = "ip=${var.main_ip}/24,gw=192.168.1.1"
+  #ipconfig0 = "ip=${"${192.168.1.141}" + count.index}/24,gw=192.168.1.1"
+  ipconfig0 = "ip=192.168.1.141/24,gw=192.168.1.1"
 
   sshkeys = var.sshkeys
-  #sshkeys = <<EOF
-  #    "private ssh key"
-#EOF
 
 provisioner "file" {
         source      = "configurek8node_phase1.sh"
@@ -55,9 +54,9 @@ provisioner "file" {
 
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password 
-            host = "${var.main_ip}"
+            user     = "debian"
+            password = "default" 
+            host = "192.168.1.141"
         }
     }
 
@@ -68,21 +67,21 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password 
-            host = "${var.main_ip}"     
+            user     = "debian"
+            password = "default" 
+            host = "192.168.1.141"     
         }
     }
     provisioner "remote-exec" {
         inline = [
-            "yum install -y docker kubelet kubeadm kubectl --disableexcludes=kubernetes"
+            "apt-get install -y kubelet kubeadm kubectl kubernetes-cni"
         ]
       
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password
-            host = "${var.main_ip}"
+            user     = "debian"
+            password = "default"
+            host = "192.168.1.141"
         }
     }
     provisioner "file" {
@@ -91,9 +90,9 @@ provisioner "file" {
 
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password
-            host = "${var.main_ip}"
+            user     = "debian"
+            password = "default"
+            host = "192.168.1.141"
         }
     }
     provisioner "remote-exec" {
@@ -103,9 +102,9 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password
-            host = "${var.main_ip}"
+            user     = "debian"
+            password = "default"
+            host = "192.168.1.141"
         }
     }
     provisioner "remote-exec" {
@@ -114,9 +113,9 @@ provisioner "file" {
         ]
         connection {
             type     = "ssh"
-            user     = "root"
-            #password = var.vsphere_vm_password
-            host = "${var.main_ip}"
+            user     = "debian"
+            password = "default"
+            host = "192.168.1.141"
         }
     }
 }

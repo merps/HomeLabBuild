@@ -8,12 +8,5 @@ variable "pm_password" {
 default = "default"
 }
 variable "ssh_key" {
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUMACmb30ibzLXL0YmzObJZEzyjfOVNTwVo9wVCwkvQtigKbPlmc+WPY9O1+VDTAIdLua/bIESYtQmWoVy48/Zz+nBgF9+RsqM1P6FXW/s5y3P0fbsoqCbLKP9uM3b2lLKnwzfzDvWBvjjLsMPW6AG6uStj087t+l5kQMo1fvc/lEclddYrL/SIoebZrslflA0ZHdXr4RTgKIX4V6zcnBN/Yc4xwd8FtEyovn7ibZz4ZuKHi6Ff9M/hfD6z1HHbqgLWQacv4uTf4rw5Wsu8dtYO9+wZbFpCHc7q+eNi9rO2O0/QsJ0KGMmNn4BegLevZwju9x8Q/J4UGhBlKAgOCGN root@pve00"
-}
-variable "proxmox_k8_nodes" {
-  default = 2
-}
-variable "proxmox_k8pod_network" {
-  description = "POD Network and Subnet Mask for K8 Configruation Script"
-  default = "10.30.0.0/16"
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDpf5QVzQDYxhceqoeOhKF+Z92bvpxasLqB6KEU9d3+ae7vXKVueA70CCBDir89nkJ0WFLLVC8xNT9Gdr4dE1d1KoNjBmDqIlaCxJbRy0UsYPSO/D8o271ILv6PagW9r/cWdxXPVJmAYSYMXgXcpAs+95KT6hCefbBAdplmGABnzsY8DRc1C+fFZp1duW8OWuoMwBlO0hmG1MwghCPTLGQm8RgYnYdoy7GA5dz4n5oKSNc2tHjaq21Zr9m1PlSmx3ew5iHMlwOCsH5Fk5l4MJbEDw9KPAS0ETMHg9d4fLnQKnM2F2HjOsw9dgegCYxmL5JI46LzRxEoAsxrqQuBDbZM1g9gT/58r7xU02PfIXVQSNciGoZrZCmeVCnUhEXhkoxVTOXltpTMufRSw5g9ha1XkMHAXcFhPQddIrh+ATJYEPzOCVe/QNY7XnyuFrWv96Or9hEprR6DThEkbX8fnGIRQih8zHNVF94lbaxgcjllaqtTt4ySgApYrJrn/SmWEScFLq5cBrvMcvPc+Hvny8jDsPgulzGQetxaflZ7CwGLMYHUo+SXI1ytrmsBlgvTSH4IUvY5XmlknuOIbwctL30M1xaeNkVLJcOWY2/XP9ImOtwdFgHC5iE61N9cf3jFF3RLpa9+/JBzEGOwZ7miq0h500UxX8hpiiIgg3cxCDctlw== jarrodl@SYD-L-00033925"
 }

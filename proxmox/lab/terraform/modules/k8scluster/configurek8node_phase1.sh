@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-mount bpffs -t bpf /sys/fs/bpf
+sudo mount bpffs -t bpf /sys/fs/bpf
 
-apt-get install -y docker.io
-systemctl enable docker
+sudo apt-get install -y docker.io
+sudo systemctl enable docker
+sudo su -
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
-add-apt-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
-apt-get update
+exit
+sudo add-apt-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main"
+sudo apt-get update
