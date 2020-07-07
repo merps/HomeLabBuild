@@ -84,7 +84,7 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local
       access: proxy
       isDefault: true
-helm install grafana stable/grafana --namespace monitoring --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values grafana.yml --set service.type=LoadBalancer
+helm install grafana stable/grafana --namespace monitoring --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values grafana.yaml --set service.type=LoadBalancer
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
 kubectl -n monitoring get services
 
@@ -92,7 +92,7 @@ kubectl -n monitoring get services
 helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=20Gi --set persistence.storageClass=longhorn
 
 # ---- Speedtest--------
-helm install speedtest billimek/speedtest -n monitoring
+helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
 kubectl logs -f --namespace monitoring $(kubectl get pods --namespace monitoring -l app=speedtest -o jsonpath='{ .items[0].metadata.name }')
 
 # EFK monitoring stack --------------------------------------------------------------------------

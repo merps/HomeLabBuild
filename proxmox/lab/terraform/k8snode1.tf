@@ -49,6 +49,7 @@ resource "proxmox_vm_qemu" "k8snode1" {
 
     provisioner "remote-exec" {
         inline = [
+            "sudo apt-get install open-iscsi -y",
             "sudo chmod 600 /home/debian/.ssh/authorized_keys",
             "sudo cp /home/debian/.ssh/authorized_keys /root/.ssh/authorized_keys"
         ]
