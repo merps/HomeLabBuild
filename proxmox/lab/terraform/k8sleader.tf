@@ -8,7 +8,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
   desc = "terraform-created vm"
   target_node = var.target_node
 
-  clone = "debian-10-template"
+  clone = var.template_name
 
   cores = var.cores
   sockets = 1
@@ -30,21 +30,20 @@ resource "proxmox_vm_qemu" "k8sleader" {
   ssh_user = var.ssh_user
 
   os_type = "cloud-init"
-  ipconfig0 = "ip=192.168.1.140/24,gw=192.168.1.1"
+  ipconfig0 = "ip=${var.leader_ip}/24,gw=${var.gateway}"
 
   sshkeys = var.sshkeys
 
-
     provisioner "remote-exec" {
         inline = [
-            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.140"
+            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=${var.leader_ip}"
         ]
       
         connection {
             type     = "ssh"
             user     = "root"
             password = "default"
-            host    = "192.168.1.140"
+            host    = var.leader_ip
         }
     }
     provisioner "remote-exec" {
@@ -62,19 +61,32 @@ resource "proxmox_vm_qemu" "k8sleader" {
             type     = "ssh"
             user     = "root"
             password = "default"
-            host    = "192.168.1.140"
+            host    = var.leader_ip
+        }
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "sudo chmod 600 /home/debian/.ssh/authorized_keys",
+            "sudo cp /home/debian/.ssh/authorized_keys /root/.ssh/authorized_keys"
+        ]
+
+        connection {
+            type     = "ssh"
+            user     = "debian"
+            password = "default"
+            host    = "192.168.1.141"
         }
     }
 
 }
 
 data "external" "kubeadm_join" {
-    program = ["./modules/k8scluster/kubeadm-token.sh"]
+    program = ["./kubeadm-token.sh"]
 
-    query = {
-        host = "192.168.1.140"
-        key = var.sshkeys
-    }
+    #query = {
+    #    host = "${var.leader_ip}"
+    #    key = var.sshkeys
+    #}
 
     depends_on = [
         proxmox_vm_qemu.k8sleader

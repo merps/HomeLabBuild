@@ -19,44 +19,59 @@ resource "proxmox_vm_qemu" "k8snode1" {
   #name = "${var.node_name}" + count.index
   name = "K8s-node-1"
   desc = "terraform-created vm"
-  target_node = "mando"
+  target_node = var.target_node
 
-  clone = "debian-10-template"
+  clone = var.template_name
 
-  cores = 2
+  cores = var.cores
   sockets = 1
-  memory = 4096
+  memory = var.memory
 
-	disk {
-		id = 0
-		type = "virtio"
-		storage = "local-lvm"
-		size = "80G"
-	}
+  disk {
+    id = 0
+    type = "virtio"
+    storage = var.storage_pool
+    size = var.storage_size
+  }
 
   network {
     id = 0
     model = "virtio"
-    bridge = "vmbr0"
+    bridge = var.bridge
   }
 
-  ssh_user = "root"
+  ssh_user = var.ssh_user
+  sshkeys = var.sshkeys
 
   os_type = "cloud-init"
   #ipconfig0 = "ip=${"${192.168.1.141}" + count.index}/24,gw=192.168.1.1"
-  ipconfig0 = "ip=192.168.1.141/24,gw=192.168.1.1"
-
-  sshkeys = var.sshkeys
+  ipconfig0 = "ip=192.168.1.141/24,gw=${var.gateway}"
 
     provisioner "remote-exec" {
         inline = [
-            "${data.external.kubeadm_join.result.command}"
+            "sudo chmod 600 /home/debian/.ssh/authorized_keys",
+            "sudo cp /home/debian/.ssh/authorized_keys /root/.ssh/authorized_keys"
         ]
+
         connection {
             type     = "ssh"
-            user     = "root"
+            user     = "debian"
             password = "default"
-            host = "192.168.1.141"
+            host    = "192.168.1.141"
         }
     }
+
+    #provisioner "remote-exec" {
+    #    inline = [
+    #        "${data.external.kubeadm_join.result.command}"
+    #    ]
+      
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "root"
+    #        password = "default"
+    #        host    = "192.168.1.141"
+    #    }
+    #}
+
 }
