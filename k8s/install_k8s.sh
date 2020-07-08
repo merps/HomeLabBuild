@@ -88,7 +88,7 @@ kubectl apply -f efk-logging/fluentd.yaml
 kubectl create namespace elk-logging
 helm install elasticsearch --version 7.8.0 elastic/elasticsearch -n elk-logging --set minimumMasterNodes="1" --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/elastic_values.yaml
 # Logstash Install
-helm install logstash elastic/logstash -n elk-logging 
+helm install logstash elastic/logstash -n elk-logging --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/logstash_values.yaml
 
 
 

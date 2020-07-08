@@ -1,0 +1,74 @@
+logstashPipeline: {}
+  logstash.conf: |
+    input {
+        tcp {
+            port => 5516
+            type => afm
+        }
+        tcp {
+            port => 5515
+            type => dns
+        }
+        tcp {
+            port => 5514
+            type => pem
+        }
+    }
+    output {
+        if [type] == 'pem' {
+          elasticsearch {
+          hosts => "elasticsearch-master.elk-logging"
+          index => "pem-%{+YYYY.MM.dd}"
+          template_name => "pem"
+        }
+        }
+        if [type] == 'afm' {
+          elasticsearch {
+          hosts => "elasticsearch-master.elk-logging"
+          index => "afm-%{+YYYY.MM.dd}"
+          template_name => "afm"
+        }
+        }
+        if [type] == 'dns' {
+          elasticsearch {
+          hosts => "elasticsearch-master.elk-logging"
+          index => "dns-%{+YYYY.MM.dd}"
+          template_name => "dns"
+        }
+        }
+        stdout {}
+    }
+
+# Shrink default JVM heap.
+logstashJavaOpts: "-Xmx128m -Xms128m"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "512M"
+  limits:
+    cpu: "1000m"
+    memory: "512M"
+
+volumeClaimTemplate:
+  accessModes: [ "ReadWriteOnce" ]
+  resources:
+    requests:
+      storage: 1Gi
+
+service: {}
+  annotations: {}
+  type: LoadBalancer
+  ports:
+    - name: pem
+      port: 5514
+      protocol: TCP
+      targetPort: 5514
+    - name: dns
+      port: 5515
+      protocol: TCP
+      targetPort: 5515
+    - name: afm
+      port: 5516
+      protocol: TCP
+      targetPort: 5516
