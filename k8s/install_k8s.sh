@@ -29,39 +29,30 @@ kubectl create secret generic -n metallb-system memberlist --from-literal=secret
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
 
 
-#--- Portainer Install ---------------------------------------------------------------------------------------
-#Portainer Install
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/portainer/portainer.yaml
-#NodePort Install Below
-#kubectl apply -f portainer-nodeport.yaml
-### ---- Check LB IP and Port allocated  ---------------------------------------------------
-kubectl -n portainer get services
-
-
-#--- Dashboard Install ---------------------------------------------------------------------------------------
-#Install Dashboard
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/dashboard/dashboard.yaml
-#Create Admin Access
-#kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/dashboard/dashboard.admin-user.yml -f dashboard.admin-user-role.yml
-#Get Token for Access
-#kubectl -n kubernetes-dashboard describe secret admin-user-token | grep ^token
-#kubectl -n kubernetes-dashboard get services
-
-
 #--- Storage Longhorn ---------------------------------------------------------------------------------------
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/002-storageclass.yaml
 kubectl -n longhorn-system get services
 
+#HELM Repos to Add Install
+helm repo add portainer http://portainer.github.io/portainer-k8s
+helm repo add stable https://kubernetes-charts.storage.googleapis.com
+helm repo add influxdata https://helm.influxdata.com/
+
+#--- Portainer Install ---------------------------------------------------------------------------------------
+#Portainer Install
+#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/portainer/portainer.yaml
+#NodePort Install Below
+#kubectl apply -f portainer-nodeport.yaml
+### ---- Check LB IP and Port allocated  ---------------------------------------------------
+#kubectl -n portainer get services
+kubectl create namespace portainer
+helm install portainer portainer/portainer-beta --namespace portainer --set service.type="LoadBalancer"
 
 #--- Hubble Install ---------------------------------------------------------------------------------------
 #Hubble Install
 #kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/hubble/hubble.yaml
 #kubectl -n kube-system get services
-
-#HELM Install
-helm repo add stable https://kubernetes-charts.storage.googleapis.com
-helm repo add influxdata https://helm.influxdata.com/
 
 # K8s Infra monitoring stack --------------------------------------------------------------------------
 # ---- Prometheus -----------
@@ -81,7 +72,7 @@ helm install grafana stable/grafana --namespace monitoring --set persistence.sto
 kubectl -n monitoring get services
 
 # --- InfluxDB ------
-helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=20Gi --set persistence.storageClass=longhorn
+helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=20Gi --set persistence.storageClass="longhorn"
 
 # ---- Speedtest--------
 helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
@@ -93,8 +84,13 @@ kubectl apply -f efk-logging/kibana.yaml
 kubectl apply -f efk-logging/fluentd.yaml
 
 # ELk Logging Stack -----------------------------------------------------------------------------
+# ElasticSearch Install
 kubectl create namespace elk-logging
 helm install elasticsearch --version 7.8.0 elastic/elasticsearch -n elk-logging 
+# Logstash Install
+helm install logstash elastic/logstash -n elk-logging --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/elastic_values.yaml
+
+
 
 
 
