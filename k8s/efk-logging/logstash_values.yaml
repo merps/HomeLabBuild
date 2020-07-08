@@ -15,6 +15,7 @@ volumeClaimTemplate:
     requests:
       storage: 1Gi
 
+#Add ports to listen
 service: {}
   annotations: {}
   type: LoadBalancer
