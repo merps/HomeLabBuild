@@ -1,4 +1,4 @@
-logstashPipeline: {}
+logstashPipeline: {
   logstash.conf: |
     input {
         tcp {
@@ -38,6 +38,7 @@ logstashPipeline: {}
         }
         stdout {}
     }
+}
 
 # Shrink default JVM heap.
 logstashJavaOpts: "-Xmx128m -Xms128m"
