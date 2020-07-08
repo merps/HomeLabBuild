@@ -1,3 +1,6 @@
+# Shrink default JVM heap.
+esJavaOpts: "-Xmx256m -Xms256m"
+
 # Allocate smaller chunks of memory per pod.
 resources:
   requests:
