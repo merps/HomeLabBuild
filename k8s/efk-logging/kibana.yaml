@@ -46,3 +46,4 @@ spec:
             value: http://elasticsearch-master.elk-logging:9200
         ports:
         - containerPort: 5601
+# New server address in elk-logging namespace
