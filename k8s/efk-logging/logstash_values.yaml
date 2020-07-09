@@ -1,3 +1,14 @@
+logstashConfig: 
+  logstash.yml: |
+    http:
+      host: "0.0.0.0"
+    xpack:
+      monitoring:
+        enabled: true
+        elasticsearch:
+          hosts:
+            - http://elasticsearch-master.elk-logging:9200
+
 logstashPipeline:
   logstash.conf: |
     input {
