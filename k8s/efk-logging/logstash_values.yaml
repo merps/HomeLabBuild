@@ -51,7 +51,7 @@ logstashPipeline:
     }
 
 # Shrink default JVM heap.
-logstashJavaOpts: "-Xmx128m -Xms128m"
+logstashJavaOpts: "-Xmx512m -Xms512m"
 
 resources:
   requests:
