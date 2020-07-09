@@ -90,7 +90,7 @@ helm install elasticsearch --version 7.8.0 elastic/elasticsearch -n elk-logging 
 # Logstash Install
 helm install logstash elastic/logstash -n elk-logging --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/logstash_values.yaml
 #Kibana
-helm install kibana elastic/kibana -n elk-logging --set replicas="2" --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/kibana_values.yaml
+helm install kibana elastic/kibana -n elk-logging --set replicas="3" --set imageTag="7.7.1" --set elasticsearchHosts="http://elasticsearch-master.elk-logging:9200" --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/kibana_values.yaml
 
 
 
