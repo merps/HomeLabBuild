@@ -7,7 +7,7 @@ logstashConfig:
         enabled: true
         elasticsearch:
           hosts:
-            - http://elasticsearch-master.elk-logging:9200
+            - http://elasticsearch.elk-logging:9200
 
 logstashPipeline:
   logstash.conf: |
