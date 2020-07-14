@@ -53,13 +53,13 @@ logstashPipeline:
 # Shrink default JVM heap.
 logstashJavaOpts: "-Xmx512m -Xms512m"
 
-resources:
-  requests:
-    cpu: "100m"
-    memory: "512M"
-  limits:
-    cpu: "1000m"
-    memory: "512M"
+#resources:
+#  requests:
+#    cpu: "100m"
+#    memory: "512M"
+#  limits:
+#    cpu: "100m"
+#    memory: "512M"
 
 volumeClaimTemplate:
   accessModes: [ "ReadWriteOnce" ]
