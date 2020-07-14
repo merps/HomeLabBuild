@@ -39,6 +39,7 @@ helm repo add portainer http://portainer.github.io/portainer-k8s
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo add influxdata https://helm.influxdata.com/
 
+
 #--- Portainer Install ---------------------------------------------------------------------------------------
 #Portainer Install
 #kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/portainer/portainer.yaml
@@ -75,7 +76,8 @@ kubectl -n monitoring get services
 helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
 
 # ---- Speedtest--------
-helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
+helm repo add billimek https://billimek.com/billimek-charts/
+helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300" --set config.speedtest.server="2629"
 kubectl logs -f --namespace monitoring $(kubectl get pods --namespace monitoring -l app=speedtest -o jsonpath='{ .items[0].metadata.name }')
 
 # EFK monitoring stack --------------------------------------------------------------------------
