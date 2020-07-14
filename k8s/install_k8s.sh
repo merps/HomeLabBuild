@@ -72,7 +72,7 @@ helm install grafana stable/grafana --namespace monitoring --set persistence.sto
 kubectl -n monitoring get services
 
 # --- InfluxDB ------
-helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=20Gi --set persistence.storageClass="longhorn"
+helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
 
 # ---- Speedtest--------
 helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
