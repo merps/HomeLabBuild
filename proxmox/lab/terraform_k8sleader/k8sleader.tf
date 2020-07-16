@@ -37,6 +37,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
     provisioner "remote-exec" {
         inline = [
             "sudo apt-get install open-iscsi -y",
+            "sudo swapoff -a",
             "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=${var.leader_ip}"
         ]
       
