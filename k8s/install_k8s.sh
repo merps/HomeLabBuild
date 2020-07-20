@@ -71,13 +71,14 @@ helm install portainer portainer/portainer-beta --namespace portainer --set serv
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/002-storageclass.yaml
 kubectl -n longhorn-system get services
-
+#Uninstall
+#kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/master/uninstall/uninstall.yaml
 
 
 #--- Hubble Install ---------------------------------------------------------------------------------------
 #Hubble Install
-#kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/hubble/hubble.yaml
-#kubectl -n kube-system get services
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/hubble/hubble.yaml
+kubectl -n kube-system get services
 
 # K8s Infra monitoring stack --------------------------------------------------------------------------
 # ---- Prometheus -----------
@@ -92,15 +93,15 @@ helm install prometheus stable/prometheus --namespace monitoring --set alertmana
 
 # ---- Grafana -----------
 #kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/001-grafana.yaml
-helm install grafana stable/grafana --namespace monitoring --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/grafana.yaml --set service.type=LoadBalancer
+helm install grafana stable/grafana --namespace monitoring --set plugins="grafana-kubernetes-app" --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/grafana.yaml --set service.type=LoadBalancer
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
 kubectl -n monitoring get services
 
 # --- InfluxDB ------
-helm install influx influxdata/influxdb--set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
+helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
 
 # ---- Speedtest--------
-helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
+helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300" --set debug="true"
 kubectl logs -f --namespace monitoring $(kubectl get pods --namespace monitoring -l app=speedtest -o jsonpath='{ .items[0].metadata.name }')
 
 # EFK monitoring stack --------------------------------------------------------------------------

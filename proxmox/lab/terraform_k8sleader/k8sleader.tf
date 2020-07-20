@@ -54,9 +54,9 @@ resource "proxmox_vm_qemu" "k8sleader" {
             "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
             "chown $(id -u):$(id -g) $HOME/.kube/config",
             #"kubectl taint nodes --all node-role.kubernetes.io/master-",
-            #"kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/cilium/cilium-custom.yaml",
-            "kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/calico/calicooperator.yaml",
-            "kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/calico/calico.yaml",
+            "kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/cilium/cilium-custom.yaml",
+            #"kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/calico/calicooperator.yaml",
+            #"kubectl create -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/calico/calico.yaml",
             "kubectl get pods --all-namespaces",
             "kubectl get nodes -o wide"
         ]
