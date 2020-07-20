@@ -38,7 +38,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
         inline = [
             "sudo apt-get install open-iscsi -y",
             "sudo swapoff -a",
-            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=${var.leader_ip}"
+            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.142 --control-plane-endpoint=192.168.1.142"
         ]
       
         connection {
@@ -68,19 +68,19 @@ resource "proxmox_vm_qemu" "k8sleader" {
             host    = var.leader_ip
         }
     }
-    provisioner "remote-exec" {
-        inline = [
-            "sudo chmod 600 /home/debian/.ssh/authorized_keys",
-            "sudo cp /home/debian/.ssh/authorized_keys /root/.ssh/authorized_keys"
-        ]
+    #provisioner "remote-exec" {
+    #    inline = [
+    #        "sudo chmod 600 /home/debian/.ssh/authorized_keys",
+    #        "sudo cp /home/debian/.ssh/authorized_keys /root/.ssh/authorized_keys"
+    #    ]
 
-        connection {
-            type     = "ssh"
-            user     = "debian"
-            password = "default"
-            host    = "192.168.1.141"
-        }
-    }
+    #    connection {
+    #        type     = "ssh"
+    #        user     = "debian"
+    #        password = "default"
+    #        host    = var.leader_ip
+    #    }
+    #}
 
 }
 

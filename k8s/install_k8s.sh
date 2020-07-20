@@ -14,11 +14,32 @@
 #Verify pods start up correctly
 #kubectl -n kube-system get pods --watch
 
+sudo apt-get install     apt-transport-https     ca-certificates     curl     gnupg-agent     software-properties-common
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+cat /etc/docker/daemon.json 
+systemctl enable docker && sudo systemctl start docker
+systemctl enable kubelet && sudo systemctl start kubelet
+bash -c "echo "1" > /proc/sys/net/bridge/bridge-nf-call-iptables"
+bash -c "echo "1" > /proc/sys/net/bridge/bridge-nf-call-ip6tables"
+sysctl --system
+sudo swapoff -a
+
+#Docker Install - https://docs.docker.com/engine/install/debian/
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo docker run hello-world
+
 
 #--- Worker Node Install ---------------------------------------------------------------------------------------
 #Install Worker Nodes
 #sudo kubeadm join 192.168.1.140:6443 --token m5tfd1.48ca3j74b7wv2ht4 --discovery-token-ca-cert-hash sha256:fad842c01a621d27fb7a02932c641260cb069a67afab656f85eff23dffc72caf
 
+#HELM Install - https://helm.sh/docs/intro/install/
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
 
 #--- Load Balancer Install ---------------------------------------------------------------------------------------
 #Install LB - Using Metallb
@@ -29,16 +50,12 @@ kubectl create secret generic -n metallb-system memberlist --from-literal=secret
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
 
 
-#--- Storage Longhorn ---------------------------------------------------------------------------------------
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/002-storageclass.yaml
-kubectl -n longhorn-system get services
-
 #HELM Repos to Add Install
 helm repo add portainer http://portainer.github.io/portainer-k8s
 helm repo add stable https://kubernetes-charts.storage.googleapis.com
 helm repo add influxdata https://helm.influxdata.com/
-
+helm repo add elastic https://helm.elastic.co
+helm repo add billimek https://billimek.com/billimek-charts/
 
 #--- Portainer Install ---------------------------------------------------------------------------------------
 #Portainer Install
@@ -49,6 +66,13 @@ helm repo add influxdata https://helm.influxdata.com/
 #kubectl -n portainer get services
 kubectl create namespace portainer
 helm install portainer portainer/portainer-beta --namespace portainer --set service.type="LoadBalancer"
+
+#--- Storage Longhorn ---------------------------------------------------------------------------------------
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml
+kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/002-storageclass.yaml
+kubectl -n longhorn-system get services
+
+
 
 #--- Hubble Install ---------------------------------------------------------------------------------------
 #Hubble Install
@@ -73,11 +97,10 @@ helm install grafana stable/grafana --namespace monitoring --set persistence.sto
 kubectl -n monitoring get services
 
 # --- InfluxDB ------
-helm install influx influxdata/influxdb --namespace monitoring --set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
+helm install influx influxdata/influxdb--set persistence.enabled=true,persistence.size=10Gi --set persistence.storageClass="longhorn"
 
 # ---- Speedtest--------
-helm repo add billimek https://billimek.com/billimek-charts/
-helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300" --set config.speedtest.server="2629"
+helm install speedtest billimek/speedtest -n monitoring --set config.influxdb.host="influx-influxdb.monitoring" --set config.delay="300"
 kubectl logs -f --namespace monitoring $(kubectl get pods --namespace monitoring -l app=speedtest -o jsonpath='{ .items[0].metadata.name }')
 
 # EFK monitoring stack --------------------------------------------------------------------------
@@ -88,7 +111,6 @@ kubectl apply -f efk-logging/fluentd.yaml
 # ELk Logging Stack -----------------------------------------------------------------------------
 # ElasticSearch Install
 kubectl create namespace elk-logging
-helm repo add elastic https://helm.elastic.co
 helm install elasticsearch --version 7.8.0 elastic/elasticsearch -n elk-logging --set minimumMasterNodes="1" --set replicas="2" --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/elastic_values.yaml
 # Logstash Install
 helm install logstash elastic/logstash -n elk-logging --set replicas="2" --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/efk-logging/logstash_values.yaml
