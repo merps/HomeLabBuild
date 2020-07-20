@@ -7,8 +7,8 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local
       access: proxy
       isDefault: true
-    - name: InfluxDB
-      type: influxdb
-      url: http://influx-influxdb.monitoring:8086
-      access: proxy
-      isDefault: false   
+    #- name: InfluxDB
+    #  type: influxdb
+    #  url: http://influx-influxdb.monitoring:8086
+    #  access: proxy
+    #  isDefault: false   

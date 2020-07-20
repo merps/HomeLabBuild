@@ -93,7 +93,7 @@ helm install prometheus stable/prometheus --namespace monitoring --set alertmana
 
 # ---- Grafana -----------
 #kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/001-grafana.yaml
-helm install grafana stable/grafana --namespace monitoring --set plugins="grafana-kubernetes-app" --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/grafana.yaml --set service.type=LoadBalancer
+helm install grafana stable/grafana --namespace monitoring --set persistence.storageClassName="longhorn" --set persistence.enabled=true --set adminPassword='Mongo!123' --values https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/prometheus-grafana/grafana/grafana.yaml --set service.type=LoadBalancer
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
 kubectl -n monitoring get services
 
