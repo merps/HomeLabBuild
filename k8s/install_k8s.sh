@@ -43,10 +43,10 @@ chmod 700 get_helm.sh
 
 #--- Load Balancer Install ---------------------------------------------------------------------------------------
 #Install LB - Using Metallb
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
-kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
+kubectl --kubeconfig ~/.kube/config_minikube apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
+kubectl --kubeconfig ~/.kube/config_minikubeapply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
 # On first install only
-kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl --kubeconfig ~/.kube/config_minikube create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
 
 
@@ -65,7 +65,7 @@ helm repo add billimek https://billimek.com/billimek-charts/
 ### ---- Check LB IP and Port allocated  ---------------------------------------------------
 #kubectl -n portainer get services
 kubectl create namespace portainer
-helm install portainer portainer/portainer-beta --namespace portainer --set service.type="LoadBalancer"
+helm --kubeconfig ~/.kube/config_minikube install portainer portainer/portainer-beta --namespace portainer --set service.type="LoadBalancer"
 
 #--- Storage Longhorn ---------------------------------------------------------------------------------------
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/longhorn/001-longhorn.yaml

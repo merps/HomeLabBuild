@@ -38,7 +38,7 @@ resource "proxmox_vm_qemu" "k8sleader" {
         inline = [
             "sudo apt-get install open-iscsi -y",
             "sudo swapoff -a",
-            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.142 --control-plane-endpoint=192.168.1.142"
+            "kubeadm init --pod-network-cidr=10.30.0.0/16 --apiserver-advertise-address=192.168.1.140 --control-plane-endpoint=192.168.1.140 --token-ttl=0"
         ]
       
         connection {
