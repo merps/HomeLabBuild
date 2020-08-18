@@ -20,13 +20,8 @@
 
 #--- Load Balancer Install ---------------------------------------------------------------------------------------
 #Install LB - Using Metallb
-<<<<<<< HEAD
-kubectl --kubeconfig ~/.kube/config_minikube apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
-kubectl --kubeconfig ~/.kube/config_minikube apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
-=======
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
->>>>>>> 303e61b20efbe898ff173b1e482211be6e8e204d
 # On first install only
 kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
