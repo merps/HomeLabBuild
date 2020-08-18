@@ -44,7 +44,7 @@ chmod 700 get_helm.sh
 #--- Load Balancer Install ---------------------------------------------------------------------------------------
 #Install LB - Using Metallb
 kubectl --kubeconfig ~/.kube/config_minikube apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb-namespace.yaml
-kubectl --kubeconfig ~/.kube/config_minikubeapply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
+kubectl --kubeconfig ~/.kube/config_minikube apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallb.yaml
 # On first install only
 kubectl --kubeconfig ~/.kube/config_minikube create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
 kubectl apply -f https://raw.githubusercontent.com/JLCode-tech/HomeLabBuild/master/k8s/metallb/metallbconfigmap.yaml
